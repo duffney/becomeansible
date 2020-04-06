@@ -1,0 +1,75 @@
+---
+- hosts: localhost
+  gather_facts: false
+  connection: local
+
+  tasks: 
+    - ec2_vpc_net_info:
+        region: us-east-1
+        filters:
+          "tag:Name": ansible
+      register: ansible_vpc
+
+    - ec2_vpc_subnet_info:
+        region: us-east-1
+        filters:
+          vpc-id: "{{ ansible_vpc.vpcs[0].id }}"
+      register: ansible_subnet
+
+    - name: redis security group
+      ec2_group:
+        name: redis
+        description: redis sg
+        vpc_id: "{{ ansible_vpc.vpcs[0].id }}"
+        region: us-east-1
+        tags:
+          Name: redis
+          app: ansible
+          env: dev
+        rules:
+          - proto: tcp
+            from_port: 22
+            to_port: 22
+            cidr_ip: 0.0.0.0/0
+            rule_desc: allow all on port 22
+
+    - name: create a new ec2 key
+      ec2_key:
+        name: ansible_key
+        region: us-east-1
+        state: present
+      register: ec2_key
+
+    - name: Save private key to disk
+      copy: content="{{ ec2_key.key.private_key }}" dest="./aws.ansible.pem" mode=0600
+      when: ec2_key.changed
+
+    - name: linux - create ec2 instance
+      ec2:
+        key_name: ansible_key
+        instance_type: t2.micro
+        image: ami-0c322300a1dd5dc79
+        region: us-east-1
+        group: redis
+        count: 1
+        vpc_subnet_id: "{{ ansible_subnet.subnets[0].id }}"
+        wait: yes
+        assign_public_ip: yes
+        instance_tags:
+          Name: redis
+          app: ansible
+          env: dev
+      register: ec2
+
+    - name: associate new elastic IPs with each of the instances
+      ec2_eip:
+        device_id: "{{ item }}"
+        region: us-east-1
+      loop: "{{ ec2.instance_ids }}"
+
+# - name: get the Administrator password
+#   ec2_win_password:
+#     profile: my-boto-profile
+#     instance_id: i-XXXXXX
+#     region: us-east-1
+#     key_file: "~/aws-creds/my_test_key.pem"

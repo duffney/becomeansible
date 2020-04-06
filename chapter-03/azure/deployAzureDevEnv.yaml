@@ -1,0 +1,185 @@
+---
+- hosts: localhost
+  connection: local
+
+  vars_prompt:
+    - name: password
+      prompt: "Enter local administrator password"
+
+  tasks:
+    - name: Create resource group
+      azure_rm_resourcegroup:
+        name: becomeansible-dev
+        location: eastus
+
+    - name: Deploy Windows Virtual Machine
+      block:
+        - name: Create virtual network
+          azure_rm_virtualnetwork:
+            resource_group: becomeansible-dev
+            name: vnet-ba-winweb
+            address_prefixes: "10.0.0.0/16"
+
+        - name: Add subnet
+          azure_rm_subnet:
+            resource_group: becomeansible-dev
+            name: snet-ba-winweb
+            address_prefix: "10.0.1.0/24"
+            virtual_network: vnet-ba-winweb
+
+        - name: Create public IP address
+          azure_rm_publicipaddress:
+            resource_group: becomeansible-dev
+            allocation_method: Static
+            name: pip-ba-winweb
+          register: output_ip_address
+
+        - name: Output public IP
+          debug:
+            msg: "The public IP is {{ output_ip_address.state.ip_address }}"
+
+        - name: Create Network Security Group
+          azure_rm_securitygroup:
+            resource_group: becomeansible-dev
+            name: nsg-ba-winweb
+            rules:
+              - name: 'allow_rdp'
+                protocol: Tcp
+                destination_port_range: 3389
+                access: Allow
+                priority: 1001
+                direction: Inbound
+              - name: 'allow_web_traffic'
+                protocol: Tcp
+                destination_port_range:
+                  - 80
+                  - 443
+                access: Allow
+                priority: 1002
+                direction: Inbound
+              - name: 'allow_powershell_remoting'
+                protocol: Tcp
+                destination_port_range:
+                  - 5985
+                  - 5986
+                access: Allow
+                priority: 1003
+                direction: Inbound
+
+        - name: Create a network interface
+          azure_rm_networkinterface:
+            name: nic-ba-winweb
+            resource_group: becomeansible-dev
+            virtual_network: vnet-ba-winweb
+            subnet_name: snet-ba-winweb
+            security_group: nsg-ba-winweb
+            ip_configurations:
+              - name: default
+                public_ip_address_name: pip-ba-winweb
+                primary: True
+
+
+        - name: Create VM
+          azure_rm_virtualmachine:
+            resource_group: becomeansible-dev
+            name: vm-ba-winweb01
+            vm_size: Standard_DS1_v2
+            admin_username: azureuser
+            admin_password: "{{ password }}"
+            network_interfaces: nic-ba-winweb
+            os_type: Windows
+            image:
+              offer: WindowsServer
+              publisher: MicrosoftWindowsServer
+              sku: 2019-Datacenter
+              version: latest
+
+    - name: Configure Windows Virtual Machine
+      block:
+        - name: create Azure vm extension to enable HTTPS WinRM listener
+          azure_rm_virtualmachineextension:
+            name: winrm-extension
+            resource_group: becomeansible-dev
+            virtual_machine_name: vm-ba-winweb01
+            publisher: Microsoft.Compute
+            virtual_machine_extension_type: CustomScriptExtension
+            type_handler_version: '1.9'
+            settings: '{"fileUris": ["https://raw.githubusercontent.com/ansible/ansible/devel/examples/scripts/ConfigureRemotingForAnsible.ps1"],"commandToExecute": "powershell -ExecutionPolicy Unrestricted -File ConfigureRemotingForAnsible.ps1"}'
+            auto_upgrade_minor_version: true
+
+        - name: Get facts for one Public IP
+          azure_rm_publicipaddress_info:
+            resource_group: becomeansible-dev
+            name: pip-ba-winweb
+          register: publicipaddresses
+
+        - name: set public ip address fact
+          set_fact: publicipaddress="{{ publicipaddresses | json_query('publicipaddresses[0].ip_address')}}"
+
+        - name: wait for the WinRM port to come online
+          wait_for:
+            port: 5986
+            host: '{{ publicipaddress }}'
+            timeout: 600
+
+    - name: Deploy Linux Virtual Machine
+      block:
+        - name: Create virtual network
+          azure_rm_virtualnetwork:
+            resource_group: becomeansible-dev
+            name: vnet-ba-redis
+            address_prefixes: "10.0.0.0/16"
+
+        - name: Add subnet
+          azure_rm_subnet:
+            resource_group: becomeansible-dev
+            name: snet-ba-redis
+            address_prefix: "10.0.1.0/24"
+            virtual_network: vnet-ba-redis
+
+        - name: Create public IP address
+          azure_rm_publicipaddress:
+            resource_group: becomeansible-dev
+            allocation_method: Static
+            name: pip-ba-redis
+          register: output_ip_address
+
+        - name: Output public IP
+          debug:
+            msg: "The public IP is {{ output_ip_address.state.ip_address }}."
+
+        - name: Create Network Security Group that allows SSH
+          azure_rm_securitygroup:
+            resource_group: becomeansible-dev
+            name: nsg-ba-redis
+            rules:
+              - name: SSH
+                protocol: Tcp
+                destination_port_range: 22
+                access: Allow
+                priority: 1001
+                direction: Inbound
+
+        - name: Create virtual network interface card
+          azure_rm_networkinterface:
+            resource_group: becomeansible-dev
+            name: nic-ba-redis
+            virtual_network: vnet-ba-redis
+            subnet: snet-ba-redis
+            public_ip_name: pip-ba-redis
+            security_group: nsg-ba-redis
+
+        - name: Create VM
+          azure_rm_virtualmachine:
+            resource_group: becomeansible-dev
+            name: vm-ba-redis
+            vm_size: Standard_DS1_v2
+            admin_username: azureuser
+            admin_password: "{{ password }}"
+            ssh_password_enabled: true
+            network_interfaces: nic-ba-redis
+            image:
+              offer: CentOS
+              publisher: OpenLogic
+              sku: '7.5'
+              version: latest

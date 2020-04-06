@@ -1,0 +1,68 @@
+---
+- hosts: localhost
+  connection: local
+
+  vars_prompt:
+    - name: password
+      prompt: "Enter local administrator password"
+
+  tasks:
+    - name: 'Linux - Create virtual network'
+      azure_rm_virtualnetwork:
+        resource_group: becomeansible-dev
+        name: vnet-redis
+        address_prefixes: "10.0.0.0/16"
+
+    - name: 'Linux - Add subnet'
+      azure_rm_subnet:
+        resource_group: becomeansible-dev
+        name: snet-redis
+        address_prefix: "10.0.1.0/24"
+        virtual_network: vnet-redis
+
+    - name: 'Linux - Create public IP address'
+      azure_rm_publicipaddress:
+        resource_group: becomeansible-dev
+        allocation_method: Static
+        name: pip-redis
+      register: output_ip_address
+
+    - name: Output public IP
+      debug:
+        msg: "The public IP is {{ output_ip_address.state.ip_address }}."
+
+    - name: 'Linux - Create Network Security Group that allows SSH'
+      azure_rm_securitygroup:
+        resource_group: becomeansible-dev
+        name: nsg-redis
+        rules:
+          - name: SSH
+            protocol: Tcp
+            destination_port_range: 22
+            access: Allow
+            priority: 1001
+            direction: Inbound
+
+    - name: 'Linux - Create virtual network interface card'
+      azure_rm_networkinterface:
+        resource_group: becomeansible-dev
+        name: nic-redis
+        virtual_network: vnet-redis
+        subnet: snet-redis
+        public_ip_name: pip-redis
+        security_group: nsg-redis
+
+    - name: 'Linux - Create VM'
+      azure_rm_virtualmachine:
+        resource_group: becomeansible-dev
+        name: vm-redis
+        vm_size: Standard_DS1_v2
+        admin_username: ansible
+        admin_password: "{{ password }}"
+        ssh_password_enabled: true
+        network_interfaces: nic-redis
+        image:
+          offer: CentOS
+          publisher: OpenLogic
+          sku: '7.5'
+          version: latest

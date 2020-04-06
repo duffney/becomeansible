@@ -1,0 +1,14 @@
+- hosts: localhost
+  tasks:
+
+  - name: '[Azure] create resource group'
+    import_playbook: azure_create_resource_group.yaml
+
+  - name: '[Azure] create windows vm'
+    import_playbook: azure_create_windows_vm.yaml
+
+  - name: '[Azure] configure windows winrm'
+    import_playbook: azure_configure_windows_winrm.yaml
+
+  - name: '[Azure] create linux vm'
+    import_playbook: azure_create_linux_vm.yaml
