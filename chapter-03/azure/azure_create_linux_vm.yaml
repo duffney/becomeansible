@@ -9,20 +9,20 @@
   tasks:
     - name: 'Linux - Create virtual network'
       azure_rm_virtualnetwork:
-        resource_group: becomeansible-dev
+        resource_group: ansible
         name: vnet-redis
         address_prefixes: "10.0.0.0/16"
 
     - name: 'Linux - Add subnet'
       azure_rm_subnet:
-        resource_group: becomeansible-dev
+        resource_group: ansible
         name: snet-redis
         address_prefix: "10.0.1.0/24"
         virtual_network: vnet-redis
 
     - name: 'Linux - Create public IP address'
       azure_rm_publicipaddress:
-        resource_group: becomeansible-dev
+        resource_group: ansible
         allocation_method: Static
         name: pip-redis
       register: output_ip_address
@@ -33,7 +33,7 @@
 
     - name: 'Linux - Create Network Security Group that allows SSH'
       azure_rm_securitygroup:
-        resource_group: becomeansible-dev
+        resource_group: ansible
         name: nsg-redis
         rules:
           - name: SSH
@@ -45,7 +45,7 @@
 
     - name: 'Linux - Create virtual network interface card'
       azure_rm_networkinterface:
-        resource_group: becomeansible-dev
+        resource_group: ansible
         name: nic-redis
         virtual_network: vnet-redis
         subnet: snet-redis
@@ -54,7 +54,7 @@
 
     - name: 'Linux - Create VM'
       azure_rm_virtualmachine:
-        resource_group: becomeansible-dev
+        resource_group: ansible
         name: vm-redis
         vm_size: Standard_DS1_v2
         admin_username: ansible
@@ -64,5 +64,5 @@
         image:
           offer: CentOS
           publisher: OpenLogic
-          sku: '7.5'
+          sku: '8.0'
           version: latest

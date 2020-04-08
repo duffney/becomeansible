@@ -35,18 +35,18 @@
 
     - name: create a new ec2 key
       ec2_key:
-        name: ansible_key
+        name: aws-ansible-key
         region: us-east-1
         state: present
       register: ec2_key
 
     - name: Save private key to disk
-      copy: content="{{ ec2_key.key.private_key }}" dest="./aws.ansible.pem" mode=0600
+      copy: content="{{ ec2_key.key.private_key }}" dest="./aws-ansible-key.pem" mode=0600
       when: ec2_key.changed
 
     - name: linux - create ec2 instance
       ec2:
-        key_name: ansible_key
+        key_name: aws-ansible-key
         instance_type: t2.micro
         image: ami-0c322300a1dd5dc79
         region: us-east-1
@@ -66,10 +66,3 @@
         device_id: "{{ item }}"
         region: us-east-1
       loop: "{{ ec2.instance_ids }}"
-
-# - name: get the Administrator password
-#   ec2_win_password:
-#     profile: my-boto-profile
-#     instance_id: i-XXXXXX
-#     region: us-east-1
-#     key_file: "~/aws-creds/my_test_key.pem"

@@ -5,5 +5,5 @@
   tasks:
     - name: Create resource group
       azure_rm_resourcegroup:
-        name: becomeansible-dev
+        name: ansible
         location: eastus

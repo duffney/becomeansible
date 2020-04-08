@@ -1,0 +1,18 @@
+---
+- hosts: all
+  gather_facts: false
+
+  # vars_prompt:
+  #   - name: password
+  #     prompt: "Enter local administrator password"
+
+  vars:
+    ansible_user: ansible
+    ansible_connection: ssh
+    #ansible_password: "{{ password }}"
+    ansible_password: "P@ssw0rd12344321"
+    ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
+
+  tasks:
+  - name: run ping
+    ping:

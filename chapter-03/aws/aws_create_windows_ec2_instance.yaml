@@ -49,18 +49,18 @@
 
     - name: create a new ec2 key
       ec2_key:
-        name: ansible_key
+        name: aws-ansible-key
         region: us-east-1
         state: present
       register: ec2_key
 
     - name: Save private key to disk
-      copy: content="{{ ec2_key.key.private_key }}" dest="./aws.ansible.pem" mode=0600
+      copy: content="{{ ec2_key.key.private_key }}" dest="./aws-ansible-key.pem" mode=0600
       when: ec2_key.changed
 
     - name: windows - create ec2 instance
       ec2:
-        key_name: ansible_key
+        key_name: aws-ansible-key
         instance_type: t2.micro
         image: ami-09d496c26aa745869
         region: us-east-1
@@ -71,6 +71,7 @@
           <powershell>
           $content = (Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/ansible/ansible/devel/examples/scripts/ConfigureRemotingForAnsible.ps1' -UseBasicParsing).content
           iex $content
+          Rename-LocalUser -Name "Administrator" -NewName "ansible"
           </powershell>
           <persist>true</persist>
         wait: yes
