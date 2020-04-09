@@ -5,6 +5,6 @@
   tasks:
     - name: delete resource group
       azure_rm_resourcegroup:
-        name: becomeansible-dev
+        name: ansible
         force_delete_nonempty: yes
         state: absent

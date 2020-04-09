@@ -3,10 +3,6 @@
   gather_facts: false
   connection: local
 
-  vars_prompt:
-    - name: password
-      prompt: "Enter local administrator password"
-
   tasks: 
     - ec2_vpc_net_info:
         region: us-east-1
@@ -52,15 +48,16 @@
       ec2:
         key_name: aws-ansible-key
         instance_type: t2.micro
-        image: ami-0c322300a1dd5dc79
+        image: ami-07ebfd5b3428b6f4d
         region: us-east-1
         group: redis
         count: 1
         vpc_subnet_id: "{{ ansible_subnet.subnets[0].id }}"
         user_data: |
           #!/bin/bash
-          sudo adduser ansible
-          sudo echo "{{ password }}" | passwd --stdin ansible
+          sudo apt-get install python -y
+          useradd -m -d /home/ansible -s /bin/bash ansible
+          echo 'ansible:P@ssw0rd12344321'|chpasswd
           echo 'ansible        ALL=(ALL)       NOPASSWD: ALL' >> /etc/sudoers
           sudo sed -n 'H;${x;s/\PasswordAuthentication no/PasswordAuthentication yes/;p;}' /etc/ssh/sshd_config > tmp_sshd_config
           sudo cat tmp_sshd_config > /etc/ssh/sshd_config

@@ -1,0 +1,12 @@
+- hosts: localhost
+  gather_facts: false
+  connection: local
+
+- name: '[Azure] create resource group'
+  import_playbook: azure_create_resource_group.yaml 
+
+- name: '[Azure] create windows vm'
+  import_playbook: azure_create_windows_vm.yaml
+
+- name: '[Azure] create linux vm'
+  import_playbook: azure_create_linux_vm.yaml

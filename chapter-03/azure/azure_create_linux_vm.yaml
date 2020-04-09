@@ -2,11 +2,18 @@
 - hosts: localhost
   connection: local
 
-  vars_prompt:
-    - name: password
-      prompt: "Enter local administrator password"
+  # vars_prompt:
+  #   - name: password
+  #     prompt: "Enter local administrator password"
+  #     when: password is undefined
 
   tasks:
+    - pause:
+        prompt: "Enter password"
+        echo: no
+      when: password is undefined
+      register: password
+
     - name: 'Linux - Create virtual network'
       azure_rm_virtualnetwork:
         resource_group: ansible
