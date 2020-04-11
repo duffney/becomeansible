@@ -5,26 +5,28 @@
   
   tasks:
 
-    - name: linux - create ec2 instance
-      ec2:
-        region: us-east-1
-        group: redis
-        wait: yes
-        state: absent
-        instance_tags:
-          Name: redis
-          app: ansible
-          env: dev
-      register: ec2
-
-    # - name: get ec2 instance info
-    #   ec2_instance_info:
+    # - name: linux - create ec2 instance
+    #   ec2:
     #     region: us-east-1
-    #     filters:
-    #       "tag:app": ansible
-    #       "tag:env": dev
+    #     group: redis
+    #     wait: yes
+    #     state: absent
+    #     instance_tags:
+    #       Name: redis
+    #       app: ansible
+    #       env: dev
     #   register: ec2
 
-    # - debug:
-    #     msg: "{{ item['instance_id'] }}"
-    #   loop: "{{ ec2['instances'] }}"
+    - name: get ec2 instance info
+      ec2_instance_info:
+        region: us-east-1
+        filters:
+          "tag:app": ansible
+          "tag:env": dev
+      register: ec2
+
+    - debug:
+        msg: "{{ item['instance_id'] }}"
+      loop: "{{ ec2['instances'] }}"
+      loop_control:
+        label: "{{ item.instance_id }}"
