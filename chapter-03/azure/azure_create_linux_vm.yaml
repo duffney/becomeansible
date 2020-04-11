@@ -12,7 +12,11 @@
         prompt: "Enter password"
         echo: no
       when: password is undefined
-      register: password
+      register: password_input
+
+    - set_fact:
+        password: "{{ password_input.user_input }}"
+      when: password is undefined
 
     - name: 'Linux - Create virtual network'
       azure_rm_virtualnetwork:
