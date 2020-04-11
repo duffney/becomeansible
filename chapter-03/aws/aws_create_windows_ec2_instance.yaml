@@ -4,6 +4,16 @@
   connection: local
 
   tasks: 
+    - pause:
+        prompt: "Enter password"
+        echo: no
+      when: password is undefined
+      register: password_input
+
+    - set_fact:
+        password: "{{ password_input.user_input }}"
+      when: password is undefined
+
     - ec2_vpc_net_info:
         region: us-east-1
         filters:
@@ -71,7 +81,9 @@
           <powershell>
           $content = (Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/ansible/ansible/devel/examples/scripts/ConfigureRemotingForAnsible.ps1' -UseBasicParsing).content
           iex $content
-          Rename-LocalUser -Name "Administrator" -NewName "ansible"
+          $password = "{{ password }}" | ConvertTo-SecureString -AsPlainText -Force
+          New-LocalUser 'ansible' -Password $password
+          Add-LocalGroupMember -Group 'Administrators' -Member 'ansible'
           </powershell>
           <persist>true</persist>
         wait: yes

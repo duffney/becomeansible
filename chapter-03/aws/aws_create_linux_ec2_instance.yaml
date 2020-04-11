@@ -3,11 +3,17 @@
   gather_facts: false
   connection: local
 
-  vars_prompt:
-    - name: password
-      prompt: "Enter local administrator password"
-
   tasks: 
+    - pause:
+        prompt: "Enter password"
+        echo: no
+      when: password is undefined
+      register: password_input
+
+    - set_fact:
+        password: "{{ password_input.user_input }}"
+      when: password is undefined
+
     - ec2_vpc_net_info:
         region: us-east-1
         filters:

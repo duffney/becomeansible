@@ -4,7 +4,7 @@
 
   vars_prompt:
     - name: password
-      prompt: "Enter local administrator password"
+      prompt: "Enter ansible user password"
 
   vars:
     ansible_user: ansible

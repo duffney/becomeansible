@@ -2,11 +2,6 @@
 - hosts: localhost
   connection: local
 
-  # vars_prompt:
-  #   - name: password
-  #     prompt: "Enter local administrator password"
-  #     when: password is undefined
-
   tasks:
     - pause:
         prompt: "Enter password"
