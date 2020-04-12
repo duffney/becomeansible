@@ -84,4 +84,5 @@
       ec2_eip:
         device_id: "{{ item }}"
         region: us-east-1
+        release_on_disassociation: yes
       loop: "{{ ec2.instance_ids }}"
