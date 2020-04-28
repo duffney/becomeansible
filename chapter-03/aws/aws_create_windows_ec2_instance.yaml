@@ -97,6 +97,7 @@
     - name: associate new elastic IPs with each of the instances
       ec2_eip:
         device_id: "{{ item }}"
+        release_on_disassociation: yes
         region: us-east-1
       loop: "{{ ec2.instance_ids }}"
 
