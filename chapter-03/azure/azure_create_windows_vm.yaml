@@ -35,9 +35,9 @@
         name: pip-winweb
       register: output_ip_address
 
-    - name: Output public IP
-      debug:
-        msg: "The public IP is {{ output_ip_address.state.ip_address }}"
+    # - name: Output public IP
+    #   debug:
+    #     msg: "The public IP is {{ output_ip_address.state.ip_address }}"
 
     - name: Windows - Create Network Security Group
       azure_rm_securitygroup:
