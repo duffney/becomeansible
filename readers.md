@@ -1,3 +1,3 @@
 # Readers
 
-* Josh Duffney
+* [Josh Duffney](https://twitter.com/joshduffney)
