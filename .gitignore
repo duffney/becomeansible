@@ -1,2 +1,3 @@
 *.pem
 /chapter-03/aws/*.pem
+.DS_Store

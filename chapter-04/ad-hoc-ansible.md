@@ -1,0 +1,3 @@
+```
+ansible localhost -m ping
+```
