@@ -31,13 +31,13 @@
       azure_rm_publicipaddress:
         resource_group: ansible
         allocation_method: Static
-        domain_name: vm-winweb01
+        domain_name: vm-winweb001
         name: pip-winweb
       register: output_ip_address
 
-    # - name: Output public IP
-    #   debug:
-    #     msg: "The public IP is {{ output_ip_address.state.ip_address }}"
+    - name: Output public IP
+      debug:
+        msg: "The public IP is {{ output_ip_address.state.ip_address }}"
 
     - name: Windows - Create Network Security Group
       azure_rm_securitygroup:
