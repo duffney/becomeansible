@@ -57,7 +57,7 @@
           #!/bin/bash
           sudo apt-get install python -y
           useradd -m -d /home/ansible -s /bin/bash ansible
-          echo 'ansible:P@ssw0rd12344321'|chpasswd
+          echo 'ansible:'|chpasswd
           echo 'ansible        ALL=(ALL)       NOPASSWD: ALL' >> /etc/sudoers
           sudo sed -n 'H;${x;s/\PasswordAuthentication no/PasswordAuthentication yes/;p;}' /etc/ssh/sshd_config > tmp_sshd_config
           sudo cat tmp_sshd_config > /etc/ssh/sshd_config

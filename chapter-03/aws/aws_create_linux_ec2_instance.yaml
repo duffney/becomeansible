@@ -26,14 +26,14 @@
           vpc-id: "{{ ansible_vpc.vpcs[0].id }}"
       register: ansible_subnet
 
-    - name: redis security group
+    - name: linux security group
       ec2_group:
-        name: redis
-        description: redis sg
+        name: linux
+        description: linux sg
         vpc_id: "{{ ansible_vpc.vpcs[0].id }}"
         region: us-east-1
         tags:
-          Name: redis
+          Name: linux
           app: ansible
           env: dev
         rules:
@@ -42,6 +42,11 @@
             to_port: 22
             cidr_ip: 0.0.0.0/0
             rule_desc: allow all on port 22
+          - proto: tcp
+            from_port: 80
+            to_port: 80
+            cidr_ip: 0.0.0.0/0
+            rule_desc: allow all on port 80
 
     - name: create a new ec2 key
       ec2_key:
@@ -60,7 +65,7 @@
         instance_type: t2.micro
         image: ami-0c322300a1dd5dc79
         region: us-east-1
-        group: redis
+        group: linux
         count: 1
         vpc_subnet_id: "{{ ansible_subnet.subnets[0].id }}"
         user_data: |
@@ -75,7 +80,7 @@
         wait: yes
         assign_public_ip: yes
         instance_tags:
-          Name: redis
+          Name: linux
           app: ansible
           env: dev
       register: ec2

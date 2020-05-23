@@ -16,31 +16,32 @@
     - name: 'Linux - Create virtual network'
       azure_rm_virtualnetwork:
         resource_group: ansible
-        name: vnet-redis
+        name: vnet-linux
         address_prefixes: "10.0.0.0/16"
 
     - name: 'Linux - Add subnet'
       azure_rm_subnet:
         resource_group: ansible
-        name: snet-redis
+        name: snet-linux
         address_prefix: "10.0.1.0/24"
-        virtual_network: vnet-redis
+        virtual_network: vnet-linux
 
     - name: 'Linux - Create public IP address'
       azure_rm_publicipaddress:
         resource_group: ansible
         allocation_method: Static
-        name: pip-redis
+        domain_name: vm-linuxweb001
+        name: pip-linux
       register: output_ip_address
 
     - name: Output public IP
       debug:
         msg: "The public IP is {{ output_ip_address.state.ip_address }}"
 
-    - name: 'Linux - Create Network Security Group that allows SSH'
+    - name: 'Linux - Create Network Security Group'
       azure_rm_securitygroup:
         resource_group: ansible
-        name: nsg-redis
+        name: nsg-linux
         rules:
           - name: SSH
             protocol: Tcp
@@ -48,27 +49,47 @@
             access: Allow
             priority: 1001
             direction: Inbound
+          - name: 'allow_web_traffic'
+            protocol: Tcp
+            destination_port_range:
+              - 80
+              - 443
+            access: Allow
+            priority: 1002
+            direction: Inbound
 
     - name: 'Linux - Create virtual network interface card'
       azure_rm_networkinterface:
         resource_group: ansible
-        name: nic-redis
-        virtual_network: vnet-redis
-        subnet: snet-redis
-        public_ip_name: pip-redis
-        security_group: nsg-redis
+        name: nic-linux
+        virtual_network: vnet-linux
+        subnet: snet-linux
+        public_ip_name: pip-linux
+        security_group: nsg-linux
 
     - name: 'Linux - Create VM'
       azure_rm_virtualmachine:
         resource_group: ansible
-        name: vm-redis
+        name: vm-linux
         vm_size: Standard_DS1_v2
         admin_username: ansible
         admin_password: "{{ password }}"
         ssh_password_enabled: true
-        network_interfaces: nic-redis
+        network_interfaces: nic-linux
+        custom_data: "{{ lookup('file', 'cloud-init.yml') }}"
         image:
           offer: CentOS
           publisher: OpenLogic
           sku: '8.0'
           version: latest
+
+    - name: Linux - update sudoers
+      azure_rm_virtualmachineextension:
+        name: update-sudoers
+        resource_group: ansible
+        virtual_machine_name: vm-linux
+        publisher: Microsoft.Compute
+        virtual_machine_extension_type: CustomScriptExtension
+        type_handler_version: '1.9'
+        settings: '{"script": "IyEvYmluL3NoCmVjaG8gJ2l0IHdvcmtlZCcgPj4gL3RtcC93b3JrZWQudHh0CiNlY2hvICdhbnNpYmxlICAgICAgICBBTEw9KEFMTCkgICAgICAgTk9QQVNTV0Q6IEFMTCcgPj4gL2V0Yy9zdWRvZXJz"}'
+        auto_upgrade_minor_version: true

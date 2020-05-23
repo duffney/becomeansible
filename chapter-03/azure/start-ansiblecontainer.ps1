@@ -1,4 +1,4 @@
-#docker run -it -w /sln -v "$(pwd)":/sln --rm -e "AZURE_SUBSCRIPTION_ID=dc4a17ec-4363-4f1e-b019-e71a4a15dc1c" -e "AZURE_CLIENT_ID=8becd8e7-1dd5-45bc-af89-3a455c0a07fd" -e "AZURE_SECRET=P@ssw0rd12344321" -e "AZURE_TENANT=e0d9abbc-a5c2-4590-aa27-86b9a8be4f6e" duffney/ansibleopsbox:latest
+#docker run -it -w /sln -v "$(pwd)":/sln --rm -e "AZURE_SUBSCRIPTION_ID=dc4a17ec-4363-4f1e-b019-e71a4a15dc1c" -e "AZURE_CLIENT_ID=8becd8e7-1dd5-45bc-af89-3a455c0a07fd" -e "AZURE_SECRET=<Password>" -e "AZURE_TENANT=e0d9abbc-a5c2-4590-aa27-86b9a8be4f6e" duffney/ansibleopsbox:latest
 [CmdletBinding()]
 param (
     [string] $SubscriptionId = ([regex]::Matches((Get-AzContext).Name,'\((.*?)\)')).groups[1].value,
