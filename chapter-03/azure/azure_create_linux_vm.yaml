@@ -87,7 +87,7 @@
       azure_rm_virtualmachineextension:
         name: update-sudoers
         resource_group: ansible
-        virtual_machine_name: vm-linux
+        virtual_machine_name: vm-linuxweb
         publisher: Microsoft.Azure.Extensions
         virtual_machine_extension_type: CustomScript
         type_handler_version: '2.0'

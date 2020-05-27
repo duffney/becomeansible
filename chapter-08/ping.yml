@@ -1,0 +1,12 @@
+---
+  - hosts: all
+    gather_facts: false
+  
+    vars:
+      ansible_user: ansible
+      ansible_password: <Password>
+      ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
+      
+    tasks:
+    - name: run ping
+      ping:

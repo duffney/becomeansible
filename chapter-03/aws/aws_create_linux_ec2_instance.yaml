@@ -80,7 +80,7 @@
         wait: yes
         assign_public_ip: yes
         instance_tags:
-          Name: linux
+          Name: linuxweb01
           app: ansible
           env: dev
       register: ec2

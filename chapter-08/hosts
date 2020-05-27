@@ -1,0 +1,4 @@
+#azure
+vm-linuxweb001.eastus.cloudapp.azure.com ansible_user=ansible ansible_password=<Password> ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+#aws
+ec2-50-16-43-189.compute-1.amazonaws.com ansible_user=ansible ansible_password=<Password> ansible_ssh_common_args='-o StrictHostKeyChecking=no'
