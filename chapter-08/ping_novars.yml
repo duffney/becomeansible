@@ -1,5 +1,5 @@
 ---
-  - hosts: all
+  - hosts: linux
     
     tasks:
     - name: run ping

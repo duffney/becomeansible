@@ -70,7 +70,7 @@
     - name: 'Linux - Create VM'
       azure_rm_virtualmachine:
         resource_group: ansible
-        name: vm-linux
+        name: vm-linuxweb
         vm_size: Standard_DS1_v2
         admin_username: ansible
         admin_password: "{{ password }}"
