@@ -1,4 +1,4 @@
 ---
 ansible_user: ansible
-ansible_password: P@ssw0rd12344321
+ansible_password: <Password>
 ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
