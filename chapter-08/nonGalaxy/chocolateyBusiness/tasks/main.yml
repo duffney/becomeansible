@@ -1,0 +1,55 @@
+---
+- name: register windows temp env var
+  win_shell: $env:TEMP
+  register: temp_out
+  changed_when: false
+
+- name: register windows programdata env var
+  win_shell: $env:ProgramData
+  register: programData_out
+  changed_when: false
+
+- set_fact:
+    choco_location: "{{ programData_out.stdout | trim + '\\chocolatey' }}"
+
+- set_fact:
+   temp_location: "{{ temp_out.stdout | trim  }}"
+
+- name: copy ChocolateyInstall.ps1
+  win_copy:
+    src: ChocolateyInstall.ps1
+    dest: "{{ temp_location + '\\ChocolateyInstall.ps1' }}" 
+
+- name: install chocolatey 
+  win_chocolatey:
+    name: chocolatey
+    state: present
+    source: "{{ temp_location + '\\ChocolateyInstall.ps1' }}"
+
+- name: create license directory
+  win_file:
+    path: "{{ choco_location + '\\license'  }}"
+    state: directory
+  tags: businessupgrade
+
+- name: copy chocolatey business license
+  win_copy:
+    src: chocolatey.license.xml
+    dest: "{{ choco_location + '\\license\\chocolatey.license.xml' }}"
+  tags: businessupgrade
+
+#TODO
+# verify license is good type $env:ChocolateyInstall\license\chocolatey.license.xml
+
+- name: copy licensed extension
+  win_copy:
+    src: chocolatey.extension.2.1.0.nupkg
+    dest: "{{ temp_location + '\\chocolatey.extension.2.1.0.nupkg' }}"
+  tags: businessupgrade
+
+- name: upgrade chocolatey to business
+  win_chocolatey:
+    name: chocolatey.extension
+    state: present
+    source: "{{ temp_location  + '\\chocolatey.extension.2.1.0.nupkg' }}"
+  tags: businessupgrade

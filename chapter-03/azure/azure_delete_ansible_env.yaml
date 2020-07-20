@@ -1,0 +1,10 @@
+---
+- hosts: localhost
+  connection: local
+  
+  tasks:
+    - name: delete resource group
+      azure_rm_resourcegroup:
+        name: ansible
+        force_delete_nonempty: yes
+        state: absent

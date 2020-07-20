@@ -1,0 +1,5 @@
+bootcmd:
+    - [ echo 'ansible        ALL=(ALL)       NOPASSWD: ALL' >> /etc/sudoers ]
+    - [ sh, -xc, "echo 'ansible        ALL=(ALL)       NOPASSWD: ALL' >> /etc/sudoers" ]
+    - [ sh, -xc, "echo $(date) ': hello world!'" ]
+    - [ cloud-init-per, once, mymkfs, mkfs, /dev/vdb ]

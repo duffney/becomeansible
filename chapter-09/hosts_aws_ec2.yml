@@ -1,0 +1,13 @@
+plugin: aws_ec2
+regions:
+  - us-east-1
+filters:
+  tag:app: ansible
+# groups:
+#   linux: "'linux' in tags.Name"
+#   windows: "'win' in tags.Name"
+hostnames:
+  - tag:Name
+keyed_groups:
+  - key: tags.os
+    separator: ""

@@ -1,0 +1,12 @@
+- hosts: localhost
+  gather_facts: false
+  connection: local
+
+- name: '[AWS] create resource group'
+  import_playbook: aws_create_vpc.yaml 
+
+- name: '[AWS] create windows vm'
+  import_playbook: aws_create_windows_ec2_instance.yaml
+
+- name: '[AWS] create linux vm'
+  import_playbook: aws_create_linux_ec2_instance.yaml

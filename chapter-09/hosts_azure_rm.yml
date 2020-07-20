@@ -1,0 +1,21 @@
+plugin: azure_rm
+include_vm_resource_groups:
+   - ansible
+auth_source: auto
+plain_host_names: yes
+# conditional_groups:
+#    #all_the_hosts: true
+#    #win_hosts: "'WindowsServer' in image.offer"
+#    #windows: "'win' in name"
+#    #linux: "'linux' in name"
+#    linux: "'linux' in os_profile.system"
+#    windows: "'windows' in os_profile.system"
+keyed_groups:
+   - key: os_profile.system
+     separator: ""
+#   - prefix: ""
+#     separator: ""
+#     key: tags.owner | default('none')
+#   - prefix: ""
+#     separator: ""
+#     key: tags.os | default('undefined_os')

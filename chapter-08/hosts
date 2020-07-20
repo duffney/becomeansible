@@ -1,0 +1,5 @@
+[linux]
+vm-linuxweb001.eastus.cloudapp.azure.com
+
+[windows]
+vm-winweb001.eastus.cloudapp.azure.com

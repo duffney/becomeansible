@@ -1,0 +1,10 @@
+- name: '[Linux] configure nginx'
+  import_playbook: configure_nginx_web_server.yml
+
+- hosts: windows
+  gather_facts: false
+  roles:
+    - chocolateyBusiness
+
+- name: '[Windows] configure IIS'
+  import_playbook: configure_iis_web_server.yml

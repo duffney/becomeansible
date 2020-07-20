@@ -1,0 +1,7 @@
+[linux]
+vm-linuxweb001.eastus.cloudapp.azure.com
+ec2-52-21-98-94.compute-1.amazonaws.com
+
+[windows]
+vm-winweb001.eastus.cloudapp.azure.com
+ec2-50-17-205-144.compute-1.amazonaws.com

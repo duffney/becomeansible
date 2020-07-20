@@ -1,0 +1,112 @@
+---
+- hosts: localhost
+  gather_facts: false
+  connection: local
+  
+  vars:
+    ec2_ids: []
+    sg_ids: []
+
+  tasks:
+
+    - ec2_vpc_net_info:
+        region: us-east-1
+        filters:
+          "tag:Name": ansible
+      register: ansible_vpc
+
+    - name: get ec2 instance info
+      ec2_instance_info:
+        region: us-east-1
+        filters:
+          "tag:app": ansible
+          "tag:env": dev
+          instance-state-name: [ "running" ]
+      register: ec2
+
+    - set_fact:
+        ec2_ids: "{{ ec2_ids }} + [ '{{ item.instance_id }}' ]"
+      loop: "{{ ec2['instances'] }}"
+      loop_control:
+        label: "{{ item.instance_id }}"
+
+    - name: disassociate an elastic IP from an instance
+      ec2_eip:
+        region: us-east-1
+        release_on_disassociation: yes
+        device_id: "{{ item }}"
+        state: absent
+      with_items: "{{ ec2_ids }}"
+
+    - name: terminate ec2 instances
+      ec2:
+        state: 'absent'
+        region: us-east-1
+        instance_ids: "{{ ec2_ids }}"
+
+    - name: sleep for 30 seconds
+      wait_for:
+        timeout: 30
+      delegate_to: localhost
+
+    - ec2_group_info:
+        region: us-east-1
+        filters:
+          group_name: 
+            - webserver
+            - redis
+          vpc-id: "{{ ansible_vpc.vpcs[0].id }}"
+      register: sgs
+
+    - set_fact:
+        sg_ids: "{{ sg_ids }} + [ '{{ item.group_id }}' ]"
+      loop: "{{ sgs['security_groups'] }}"
+      loop_control:
+        label: "{{ item.group_id }}"
+
+    - name: delete security groups
+      ec2_group:
+        region: us-east-1
+        group_id: "{{ item }}"
+        state: absent
+      loop: "{{ sg_ids }}"
+
+    - name: delete internet gateway
+      ec2_vpc_igw:
+        vpc_id: "{{ ansible_vpc.vpcs[0].id }}"
+        region: us-east-1
+        state: absent
+        tags:
+          Name: "ansible-igw"
+          app: ansible
+          env: dev
+
+    - name: delete subnet
+      ec2_vpc_subnet:
+        region: us-east-1
+        cidr: 10.0.1.0/24
+        vpc_id: "{{ ansible_vpc.vpcs[0].id }}"
+        tags:
+          Name: ansible-subnet
+          app: ansible
+          env: dev
+        state: absent
+
+    - name: delete route IGW
+      ec2_vpc_route_table:
+        vpc_id: "{{ ansible_vpc.vpcs[0].id }}"
+        region: us-east-1
+        tags:
+          Name: ansible-public
+        state: absent
+
+    - name: delete VPC
+      ec2_vpc_net:
+        name: ansible
+        region: us-east-1
+        cidr_block: 10.0.0.0/16
+        tags:
+          Name: ansible-vpc
+          app: ansible
+          env: dev
+        state: absent

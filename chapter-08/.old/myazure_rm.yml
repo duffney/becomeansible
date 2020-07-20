@@ -1,0 +1,14 @@
+plugin: azure_rm
+include_vm_resource_groups:
+   - ansible
+auth_source: auto
+plain_host_names: yes
+# conditional_groups:
+#   all_the_hosts: true
+keyed_groups:
+  - prefix: ""
+    separator: ""
+    key: tags.owner | default('none')
+  - prefix: ""
+    separator: ""
+    key: tags.os | default('undefined_os')

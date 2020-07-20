@@ -1,0 +1,94 @@
+---
+- hosts: localhost
+  gather_facts: false
+  connection: local
+
+  tasks: 
+    - pause:
+        prompt: "Enter password"
+        echo: no
+      when: password is undefined
+      register: password_input
+
+    - set_fact:
+        password: "{{ password_input.user_input }}"
+      when: password is undefined
+
+    - ec2_vpc_net_info:
+        region: us-east-1
+        filters:
+          "tag:Name": ansible
+      register: ansible_vpc
+
+    - ec2_vpc_subnet_info:
+        region: us-east-1
+        filters:
+          vpc-id: "{{ ansible_vpc.vpcs[0].id }}"
+      register: ansible_subnet
+
+    - name: linux security group
+      ec2_group:
+        name: linux
+        description: linux sg
+        vpc_id: "{{ ansible_vpc.vpcs[0].id }}"
+        region: us-east-1
+        tags:
+          Name: linux
+          app: ansible
+          env: dev
+        rules:
+          - proto: tcp
+            from_port: 22
+            to_port: 22
+            cidr_ip: 0.0.0.0/0
+            rule_desc: allow all on port 22
+          - proto: tcp
+            from_port: 80
+            to_port: 80
+            cidr_ip: 0.0.0.0/0
+            rule_desc: allow all on port 80
+
+    - name: create a new ec2 key
+      ec2_key:
+        name: aws-ansible-key
+        region: us-east-1
+        state: present
+      register: ec2_key
+
+    - name: Save private key to disk
+      copy: content="{{ ec2_key.key.private_key }}" dest="./aws-ansible-key.pem" mode=0600
+      when: ec2_key.changed
+
+    - name: linux - create ec2 instance
+      ec2:
+        key_name: aws-ansible-key
+        instance_type: t2.micro
+        image: ami-0c322300a1dd5dc79
+        region: us-east-1
+        group: linux
+        count: 1
+        vpc_subnet_id: "{{ ansible_subnet.subnets[0].id }}"
+        user_data: |
+          #!/bin/bash
+          sudo adduser ansible
+          sudo echo "{{ password }}" | passwd --stdin ansible
+          echo 'ansible        ALL=(ALL)       NOPASSWD: ALL' >> /etc/sudoers
+          sudo sed -n 'H;${x;s/\PasswordAuthentication no/PasswordAuthentication yes/;p;}' /etc/ssh/sshd_config > tmp_sshd_config
+          sudo cat tmp_sshd_config > /etc/ssh/sshd_config
+          rm -f tmp_sshd_config
+          sudo service sshd restart
+        wait: yes
+        assign_public_ip: yes
+        instance_tags:
+          Name: linuxweb01
+          app: ansible
+          env: dev
+          os: linux
+      register: ec2
+
+    - name: associate new elastic IPs with each of the instances
+      ec2_eip:
+        device_id: "{{ item }}"
+        region: us-east-1
+        release_on_disassociation: yes
+      loop: "{{ ec2.instance_ids }}"

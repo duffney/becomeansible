@@ -1,0 +1,12 @@
+- hosts: localhost
+  gather_facts: false
+  connection: local
+
+- name: '[Azure] create azure resources'
+  import_playbook: deploy_azure_resources.yml
+
+- name: '[Azure] configure nginx web server'
+  import_playbook: configure_nginx_web_server.yml
+
+
+  
