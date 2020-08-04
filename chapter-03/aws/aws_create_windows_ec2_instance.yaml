@@ -73,7 +73,7 @@
       ec2:
         key_name: aws-ansible-key
         instance_type: t2.micro
-        image: ami-09d496c26aa745869
+        image: ami-0f38562b9d4de0dfe
         region: us-east-1
         group: windows
         count: 1
