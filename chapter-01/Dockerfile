@@ -1,8 +1,7 @@
 FROM centos:centos7.7.1908
 
-RUN  yum check-update; \
-   yum install -y gcc libffi-devel python-devel openssl-devel epel-release; \
-   yum install -y python-pip python-wheel; \
+RUN yum check-update; \
+   yum install -y gcc libffi-devel python3 epel-release; \
    yum install -y openssh-clients; \
-   pip install --upgrade pip; \
-   pip install ansible
+   pip3 install --upgrade pip; \
+   pip3 install ansible
