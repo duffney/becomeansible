@@ -31,7 +31,7 @@
       azure_rm_publicipaddress:
         resource_group: ansible
         allocation_method: Static
-        domain_name: vm-winweb001
+        domain_name: "vm-winweb{{ 100 | random}}"
         name: pip-winweb
       register: output_ip_address
 

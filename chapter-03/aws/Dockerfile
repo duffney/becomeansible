@@ -1,14 +1,12 @@
 FROM centos:centos7.7.1908
 
 RUN  yum check-update; \
-   yum install -y gcc libffi-devel python-devel openssl-devel epel-release; \
-   yum install -y python-pip python-wheel; \
+   yum install -y gcc libffi-devel python3 epel-release; \
    yum install -y openssh-clients; \
-   yum install -y sshpass
-   
-RUN pip install --upgrade pip
+   yum install -y sshpass; \
+   pip3 install --upgrade pip
 
-RUN pip install ansible; \
-   pip install boto; \
-   pip install boto3; \
-   pip install "pywinrm>=0.3.0"
+RUN pip3 install ansible; \
+   pip3 install boto; \
+   pip3 install boto3; \
+   pip3 install "pywinrm>=0.3.0"

@@ -13,6 +13,10 @@
         password: "{{ password_input.user_input }}"
       when: password is undefined
 
+    - set_fact:
+        count: "{{ 100 | random }}"
+      run_once: yes
+
     - name: 'Linux - Create virtual network'
       azure_rm_virtualnetwork:
         resource_group: ansible
@@ -30,7 +34,7 @@
       azure_rm_publicipaddress:
         resource_group: ansible
         allocation_method: Static
-        domain_name: vm-linuxweb001
+        domain_name: "vm-linuxweb{{ count }}"
         name: pip-linux
       register: output_ip_address
 
@@ -64,13 +68,16 @@
         name: nic-linux
         virtual_network: vnet-linux
         subnet: snet-linux
-        public_ip_name: pip-linux
         security_group: nsg-linux
+        ip_configurations:
+          - name: linux-ipconfig
+            public_ip_name: pip-linux
+            primary: True
 
     - name: 'Linux - Create VM'
       azure_rm_virtualmachine:
         resource_group: ansible
-        name: vm-linuxweb
+        name: "vm-linuxweb{{ count }}"
         vm_size: Standard_DS1_v2
         admin_username: ansible
         admin_password: "{{ password }}"
@@ -87,7 +94,7 @@
       azure_rm_virtualmachineextension:
         name: update-sudoers
         resource_group: ansible
-        virtual_machine_name: vm-linuxweb
+        virtual_machine_name: "vm-linuxweb{{ count }}"
         publisher: Microsoft.Azure.Extensions
         virtual_machine_extension_type: CustomScript
         type_handler_version: '2.0'

@@ -1,8 +1,7 @@
 FROM centos:centos7.7.1908
 
 RUN yum check-update; \
-   yum install -y gcc libffi-devel python-devel openssl-devel epel-release; \
-   yum install -y python-pip python-wheel; \
+   yum install -y gcc libffi-devel python3 epel-release; \
    yum install -y openssh-clients; \
    yum install -y sshpass; \
    yum install git -y; \
@@ -10,11 +9,11 @@ RUN yum check-update; \
    yum install -y powershell; \
    pwsh -c "Set-PackageSource -Name PSGallery -Trusted"; \
    pwsh -c "Install-Module AZ -Scope AllUsers"; \
-   pip install --upgrade pip
+   pip3 install --upgrade pip
 
-RUN  pip install ansible[azure]; \
-   pip install "pywinrm>=0.3.0"; \
-   pip install ansible-lint
+RUN  pip3 install ansible[azure]; \
+   pip3 install "pywinrm>=0.3.0"; \
+   pip3 install ansible-lint
 
 RUN pip2.7 install cryptography==2.2.2
 
