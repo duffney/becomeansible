@@ -14,6 +14,10 @@
         password: "{{ password_input.user_input }}"
       when: password is undefined
 
+    - set_fact:
+        count: "{{ 100 | random }}"
+      run_once: yess
+
     - name: Windows - Create virtual network
       azure_rm_virtualnetwork:
         resource_group: ansible
@@ -31,7 +35,7 @@
       azure_rm_publicipaddress:
         resource_group: ansible
         allocation_method: Static
-        domain_name: "vm-winweb{{ 100 | random}}"
+        domain_name: "vm-winweb{{ count }}"
         name: pip-winweb
       register: output_ip_address
 
@@ -82,7 +86,7 @@
     - name: Windows - Create VM
       azure_rm_virtualmachine:
         resource_group: ansible
-        name: vm-winweb01
+        name: "vm-winweb{{ count }}" 
         vm_size: Standard_DS1_v2
         admin_username: ansible
         admin_password: "{{ password }}"
@@ -98,7 +102,7 @@
       azure_rm_virtualmachineextension:
         name: winrm-extension
         resource_group: ansible
-        virtual_machine_name: vm-winweb01
+        virtual_machine_name: "vm-winweb{{ count }}"
         publisher: Microsoft.Compute
         virtual_machine_extension_type: CustomScriptExtension
         type_handler_version: '1.10'
