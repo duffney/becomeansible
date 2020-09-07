@@ -2,22 +2,22 @@ Start as a beginner, leave production-ready. Build a container-centric Ansible d
 
 **Contents**
 
-```
-|-- Preface
-|-- About the book
-|-- Part 1: Setup an Ansible Environment
-|   |-- Ansible Development with Containers
-|   |-- Connect to the Cloud
-|   |-- Deploy an Ansible Dev Environment
-|-- Part 2: become Ansible
-|   |-- Starting at the Source
-|   |-- Using Ad-hoc Ansible Commands
-|   |-- What is Repeated is a Playbooks
-|   |-- Take Inventory of the Infrastructure
-|   |-- Building Reusable Configurations
-|   |-- Dynamic Inventories for Scaling
-|   |-- Build a CI \ CD pipeline for Ansible with Github Actions
-```
+* Preface
+* About the book
+* **Part 1: Setup an Ansible Environment**
+* Ansible Development with Containers
+* Connect to the Cloud
+* Deploy an Ansible Dev Environment
+* **Part 2: become Ansible**
+* Starting at the Source
+* Using Ad-hoc Ansible Commands
+* What is Repeated is a Playbooks
+* Take Inventory of the Infrastructure
+* Building Reusable Configurations 
+* Dynamic Inventories for Scaling
+* Build a CI \ CD pipeline for Ansible with Github Actions
+
+[<img src="_img/buythebook.png">](https://gumroad.com/l/become-ansible)
 
 **Praise for become Ansible**
 
