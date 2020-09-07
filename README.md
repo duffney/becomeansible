@@ -17,6 +17,8 @@ Start as a beginner, leave production-ready. Build a container-centric Ansible d
 * Dynamic Inventories for Scaling
 * Build a CI \ CD pipeline for Ansible with Github Actions
 
+[<img src="_img/cover.png">](https://gumroad.com/l/become-ansible)
+
 [<img src="_img/buythebook.png">](https://gumroad.com/l/become-ansible)
 
 **Praise for become Ansible**
