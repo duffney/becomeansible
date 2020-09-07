@@ -19,9 +19,6 @@ Start as a beginner, leave production-ready. Build a container-centric Ansible d
 |   |-- Build a CI \ CD pipeline for Ansible with Github Actions
 ```
 
-<script src="https://gumroad.com/js/gumroad.js"></script>
-<a class="gumroad-button" href="https://gum.co/become-ansible" target="_blank">Buy the book</a>
-
 **Praise for become Ansible**
 
 > "To become Ansible is to become part of something larger. It is to derive value from the combination of many tools and processes. To become Ansible is to be a sysadmin with an array of technologies at your disposal. What can you build with an array of tools? Anything. Everything." Read the full review here.
