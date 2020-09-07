@@ -1,0 +1,40 @@
+---
+- name: register windows temp env var
+  win_shell: $env:TEMP
+  register: temp_out
+  changed_when: false
+
+- name: register windows programdata env var
+  win_shell: $env:ProgramData
+  register: programData_out
+  changed_when: false
+
+- set_fact:
+    choco_location: "{{ programData_out.stdout | trim + '\\chocolatey' }}"
+
+- set_fact:
+   temp_location: "{{ temp_out.stdout | trim  }}"
+
+- name: copy ChocolateyInstall.ps1
+  win_copy:
+    src: ChocolateyInstall.ps1
+    dest: "{{ temp_location + '\\ChocolateyInstall.ps1' }}"
+
+- name: install chocolatey 
+  win_chocolatey:
+    name: chocolatey
+    state: present
+    source: "{{ temp_location + '\\ChocolateyInstall.ps1' }}"
+
+- name: copy chocolatey.extension
+  win_copy:
+    src: chocolatey-core.extension.1.3.5.1.nupkg
+    dest: "{{ temp_location + '\\chocolatey-core.extension.1.3.5.1.nupkg' }}"
+  tags: chocolateyExtension
+  
+- name: install chocolatey.extension
+  win_chocolatey:
+    name: chocolatey-core.extension
+    state: present
+    source: "{{ temp_location  + '\\chocolatey-core.extension.1.3.5.1.nupkg' }}"
+  tags: chocolateyExtension
