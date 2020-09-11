@@ -6,4 +6,4 @@
 * [Gnaneshwara Babu](https://twitter.com/mail2gnana)
 * [Rick Highness](https://twitter.com/rhighness)
 * [Pieter Jan Geutjens](https://twitter.com/pjgeutjens)
-* [Paul Ewen]
+* Paul Ewen
