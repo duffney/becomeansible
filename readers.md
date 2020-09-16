@@ -7,3 +7,4 @@
 * [Rick Highness](https://twitter.com/rhighness)
 * [Pieter Jan Geutjens](https://twitter.com/pjgeutjens)
 * Paul Ewen
+* [Jonathan Waring](https://twitter.com/JonnyWaring1)
