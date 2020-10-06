@@ -16,7 +16,7 @@
 
     - set_fact:
         count: "{{ 100 | random }}"
-      run_once: yess
+      run_once: yes
 
     - name: Windows - Create virtual network
       azure_rm_virtualnetwork:
