@@ -10,5 +10,6 @@ RUN yum check-update; \
    pwsh -c "Install-Module AZ -Scope AllUsers"; \
    pip3 install --upgrade pip
 
-RUN pip3 install ansible[azure]; \
+RUN pip3 install "ansible==2.9.12"; \ 
+   pip3 install ansible[azure]; \
    pip3 install "pywinrm>=0.3.0"
