@@ -6,7 +6,7 @@ RUN  yum check-update; \
    yum install -y sshpass; \
    pip3 install --upgrade pip
 
-RUN pip3 install ansible; \
+RUN ppip3 install "ansible==2.9.12"; \
    pip3 install boto; \
    pip3 install boto3; \
    pip3 install "pywinrm>=0.3.0"
