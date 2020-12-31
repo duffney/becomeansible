@@ -10,3 +10,4 @@
 * [Jonathan Waring](https://twitter.com/JonnyWaring1)
 * [Connor Carnes](https://twitter.com/connorcarnes)
 * [Scott Stevenson](https://twitter.com/scottoxps)
+* [Ed Pickett](https://twitter.com/eluno_1)
