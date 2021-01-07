@@ -1,3 +1,4 @@
+---
 - name: '[Linux] configure nginx'
   import_playbook: configure_nginx_web_server.yml
 
