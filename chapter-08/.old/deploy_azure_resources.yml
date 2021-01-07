@@ -194,7 +194,7 @@
                 admin_password: "{{ password }}"
                 ssh_password_enabled: true
                 network_interfaces: nic-linux
-                #custom_data: "{{ lookup('file', 'cloud-init.yml') }}"
+                # custom_data: "{{ lookup('file', 'cloud-init.yml') }}"
                 image:
                   offer: CentOS
                   publisher: OpenLogic

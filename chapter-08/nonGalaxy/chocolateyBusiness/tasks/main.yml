@@ -38,7 +38,7 @@
     dest: "{{ choco_location + '\\license\\chocolatey.license.xml' }}"
   tags: businessupgrade
 
-#TODO
+# TODO
 # verify license is good type $env:ChocolateyInstall\license\chocolatey.license.xml
 
 - name: copy licensed extension
