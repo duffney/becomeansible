@@ -11,16 +11,16 @@
         name:
           - nginx
         state: latest
-      become: yes
+      become: true
 
     - name: copy index.html
       copy:
         src: index.html
         dest: /usr/share/nginx/html/index.html
-      become: yes
+      become: true
 
     - name: start nginx service
       service:
         name: nginx
         state: started
-      become: yes
+      become: true

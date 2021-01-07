@@ -11,15 +11,15 @@
     - name: Install IIS
       win_feature:
         name: web-server
-        include_management_tools: yes
-        include_sub_features: yes
+        include_management_tools: true
+        include_sub_features: true
         state: present
 
     - name: Copy index.html to wwwroot
       win_copy:
         src: index.html
         dest: C:\inetpub\wwwroot\index.html
-        force: yes
+        force: true
 
     - name: Create logs directory
       win_file:

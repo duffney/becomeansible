@@ -11,7 +11,7 @@
 
     - pause:
         prompt: "Enter password"
-        echo: no
+        echo: false
       when: password is undefined
       register: password_input
 
@@ -85,7 +85,7 @@
             ip_configurations:
               - name: default
                 public_ip_address_name: pip-winweb
-                primary: True
+                primary: true
 
         - name: Windows - Create VM
           azure_rm_virtualmachine:
