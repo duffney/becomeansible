@@ -38,6 +38,7 @@
       win_chocolatey:
         name: "dotnetcore-windowshosting"
         version: "3.1.0"
+        # yamllint disable-line rule:line-length
         install_args: "OPT_NO_RUNTIME=1 OPT_NO_SHAREDFX=1 OPT_NO_X86=1 OPT_NO_SHARED_CONFIG_CHECK=1"
         state: present
       notify: restart IIS

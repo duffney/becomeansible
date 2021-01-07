@@ -1,4 +1,5 @@
 ---
+# yamllint disable rule:line-length
 bootcmd:
     - [ echo 'ansible        ALL=(ALL)       NOPASSWD: ALL' >> /etc/sudoers ]
     - [ sh, -xc, "echo 'ansible        ALL=(ALL)       NOPASSWD: ALL' >> /etc/sudoers" ]

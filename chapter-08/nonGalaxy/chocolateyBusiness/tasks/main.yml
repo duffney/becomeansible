@@ -39,7 +39,8 @@
   tags: businessupgrade
 
 # TODO
-# verify license is good type $env:ChocolateyInstall\license\chocolatey.license.xml
+# verify license is good type:
+# $env:ChocolateyInstall\license\chocolatey.license.xml
 
 - name: copy licensed extension
   win_copy:
