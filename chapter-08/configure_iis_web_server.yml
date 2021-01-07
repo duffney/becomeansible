@@ -1,20 +1,20 @@
 ---
-  - hosts: windows
-    gather_facts: false
+- hosts: windows
+  gather_facts: false
 
-    vars:
-      ansible_connection: winrm
-      ansible_winrm_transport: ntlm
-      ansible_winrm_server_cert_validation: ignore
-  
-    tasks:
+  vars:
+    ansible_connection: winrm
+    ansible_winrm_transport: ntlm
+    ansible_winrm_server_cert_validation: ignore
+
+  tasks:
     - name: Install IIS
       win_feature:
-          name: web-server
-          include_management_tools: yes
-          include_sub_features: yes
-          state: present
-  
+        name: web-server
+        include_management_tools: yes
+        include_sub_features: yes
+        state: present
+
     - name: Copy index.html to wwwroot
       win_copy:
         src: index.html
@@ -34,6 +34,6 @@
         state: present
       notify: restart IIS
 
-    handlers:
-      - name: restart IIS
-        win_shell: '& {iisreset}'
+  handlers:
+    - name: restart IIS
+      win_shell: '& {iisreset}'

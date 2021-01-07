@@ -1,11 +1,11 @@
 ---
-  - hosts: linux
-    gather_facts: false
-  
-    vars:
-      ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
-      
-    tasks:
+- hosts: linux
+  gather_facts: false
+
+  vars:
+    ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
+
+  tasks:
     - name: install nginx
       package:
         name:
@@ -18,9 +18,9 @@
         src: index.html
         dest: /usr/share/nginx/html/index.html
       become: yes
-    
+
     - name: start nginx service
       service:
-          name: nginx
-          state: started
+        name: nginx
+        state: started
       become: yes

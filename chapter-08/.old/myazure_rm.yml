@@ -1,6 +1,6 @@
 plugin: azure_rm
 include_vm_resource_groups:
-   - ansible
+  - ansible
 auth_source: auto
 plain_host_names: yes
 # conditional_groups:
