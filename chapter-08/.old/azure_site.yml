@@ -1,3 +1,4 @@
+---
 - hosts: localhost
   gather_facts: false
   connection: local
@@ -7,6 +8,3 @@
 
 - name: '[Azure] configure nginx web server'
   import_playbook: configure_nginx_web_server.yml
-
-
-  

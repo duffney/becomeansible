@@ -4,7 +4,7 @@ ansible_password=<Password>
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 
 [linux]
-vm-linuxweb001.eastus.cloudapp.azure.com 
+vm-linuxweb001.eastus.cloudapp.azure.com
 ec2-54-211-23-17.compute-1.amazonaws.com
 
 [windows:vars]
@@ -14,5 +14,5 @@ ansible_winrm_server_cert_validation=ignore
 ansible_connection=winrm
 
 [windows]
-vm-winweb001.eastus.cloudapp.azure.com 
+vm-winweb001.eastus.cloudapp.azure.com
 ec2-3-231-5-122.compute-1.amazonaws.com
