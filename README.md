@@ -2,7 +2,7 @@
 
 Build a container-centric Ansible development environment and crawl, walk, run, sprint your way through learning Ansible. 
 
-You’ll start by running ad-hoc Ansible commands and by the end you’ll be deploying Ansible with commits and pull requests! become Ansible was forged through years of experience as an engineering team learned and implemented Ansible in an organization. It shares all those learned the hard way lessons with you in under 140 pages. 
+You start by running ad-hoc Ansible commands and by the end you’ll be deploying Ansible with commits and pull requests! become Ansible was forged through years of experience as an engineering team learned and implemented Ansible in an organization. It shares all those learned the hard way lessons with you in under 140 pages. 
 
 You don’t need a cryptic tome, you need a player’s guide.
 
