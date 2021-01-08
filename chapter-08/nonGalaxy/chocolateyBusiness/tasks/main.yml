@@ -1,4 +1,5 @@
 ---
+# NOT USED IN BOOK, just an example
 - name: register windows temp env var
   win_shell: $env:TEMP
   register: temp_out
