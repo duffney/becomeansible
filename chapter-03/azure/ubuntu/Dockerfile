@@ -11,7 +11,8 @@ RUN apt-get update; \
     apt-get install -y powershell; \
     pwsh -c "Set-PackageSource -Name PSGallery -Trusted"; \
     pwsh -c "Install-Module AZ -Scope AllUsers"; \
-    apt install -y python3-pip
+    apt install -y python3-pip; \
+    apt-get clean
 
 RUN pip3 install --upgrade pip; \
     pip3 install "ansible==2.9.12"; \
