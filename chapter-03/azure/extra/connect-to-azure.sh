@@ -1,11 +1,11 @@
 #!/bin/bash
 echo 'Enter Azure Subscription Name'
 
-read azuresubname
+read -r azuresubname
 
 echo 'Enter Azure Service Principal Password'
 
-read password
+read -r password
 
 subscriptionId=$(pwsh -c "(Get-AzSubscription -SubscriptionName '$azuresubname').id")
 
