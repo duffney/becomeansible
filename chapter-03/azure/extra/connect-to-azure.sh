@@ -14,7 +14,7 @@ secret=$password
 
 tenantid=$(pwsh -c "(Get-AzSubscription -SubscriptionName '$azuresubname').TenantId")
 
-echo $subscriptionId
+echo "$subscriptionId"
 
 export AZURE_SUBSCRIPTION_ID=$subscriptionId
 export AZURE_CLIENT_ID=$clientid
@@ -24,4 +24,4 @@ export AZURE_TENANT=$tenantid
 #System.Environment]::SetEnvironmentVariable('<variable','value', $Scope)
 #Where scope is "Machine"
 
-#. ./connect-to-azure.sh 
+#. ./connect-to-azure.sh
