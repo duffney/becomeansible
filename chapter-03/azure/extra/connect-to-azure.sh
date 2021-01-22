@@ -1,3 +1,4 @@
+#!/bin/bash
 echo 'Enter Azure Subscription Name'
 
 read azuresubname
