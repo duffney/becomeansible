@@ -1,3 +1,4 @@
+---
 # .ansible-lint
 skip_list:
   - '403'  # Package installs should not use latest

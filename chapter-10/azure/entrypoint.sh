@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo $ANSIBLE_VAULT_PASSWORD >> .vault
+echo "$ANSIBLE_VAULT_PASSWORD" >> .vault
 
 ansible-galaxy install -r roles/requirements.yml
 

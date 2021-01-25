@@ -1,10 +1,11 @@
+#!/bin/bash
 echo 'Enter Azure Subscription Name'
 
-read azuresubname
+read -r azuresubname
 
 echo 'Enter Azure Service Principal Password'
 
-read password
+read -r password
 
 subscriptionId=$(pwsh -c "(Get-AzSubscription -SubscriptionName '$azuresubname').id")
 
@@ -14,7 +15,7 @@ secret=$password
 
 tenantid=$(pwsh -c "(Get-AzSubscription -SubscriptionName '$azuresubname').TenantId")
 
-echo $subscriptionId
+echo "$subscriptionId"
 
 export AZURE_SUBSCRIPTION_ID=$subscriptionId
 export AZURE_CLIENT_ID=$clientid
@@ -24,4 +25,4 @@ export AZURE_TENANT=$tenantid
 #System.Environment]::SetEnvironmentVariable('<variable','value', $Scope)
 #Where scope is "Machine"
 
-#. ./connect-to-azure.sh 
+#. ./connect-to-azure.sh
