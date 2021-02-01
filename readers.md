@@ -11,3 +11,4 @@
 * [Connor Carnes](https://twitter.com/connorcarnes)
 * [Scott Stevenson](https://twitter.com/scottoxps)
 * [Ed Pickett](https://twitter.com/eluno_1)
+* [Clem Messerli](https://twitter.com/clemmesserli)
