@@ -12,3 +12,4 @@
 * [Scott Stevenson](https://twitter.com/scottoxps)
 * [Ed Pickett](https://twitter.com/eluno_1)
 * [Clem Messerli](https://twitter.com/clemmesserli)
+* Chris Lee
