@@ -1,4 +1,4 @@
-FROM centos:centos7.7.1908
+FROM centos:7
 
 RUN  yum check-update; \
    yum install -y gcc libffi-devel python3 epel-release; \
