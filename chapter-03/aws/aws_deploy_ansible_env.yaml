@@ -2,7 +2,7 @@
   gather_facts: false
   connection: local
 
-- name: '[AWS] create resource group'
+- name: '[AWS] create vpc'
   import_playbook: aws_create_vpc.yaml 
 
 - name: '[AWS] create windows vm'
