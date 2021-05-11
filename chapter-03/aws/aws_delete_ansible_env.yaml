@@ -9,7 +9,8 @@
 
   tasks:
 
-    - ec2_vpc_net_info:
+    - name: get vpc info
+      ec2_vpc_net_info:
         region: us-east-1
         filters:
           "tag:Name": ansible
@@ -44,17 +45,18 @@
         region: us-east-1
         instance_ids: "{{ ec2_ids }}"
 
-    - name: sleep for 30 seconds
+    - name: sleep for 60 seconds
       wait_for:
-        timeout: 30
+        timeout: 60
       delegate_to: localhost
 
-    - ec2_group_info:
+    - name: get security groups info
+      ec2_group_info:
         region: us-east-1
         filters:
           group_name: 
-            - webserver
-            - redis
+            - linux
+            - windows
           vpc-id: "{{ ansible_vpc.vpcs[0].id }}"
       register: sgs
 
@@ -92,7 +94,7 @@
           env: dev
         state: absent
 
-    - name: delete route IGW
+    - name: delete route table
       ec2_vpc_route_table:
         vpc_id: "{{ ansible_vpc.vpcs[0].id }}"
         region: us-east-1
