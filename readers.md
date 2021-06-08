@@ -15,3 +15,4 @@
 * Chris Lee
 * [Luis Torres](https://twitter.com/Devl0x)
 * [Radu Lupan](https://twitter.com/RaduLupan)
+* [Juanjo Cruz](https://twitter.com/ju4njo_cruz)
