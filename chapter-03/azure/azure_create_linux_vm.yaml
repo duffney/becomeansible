@@ -78,7 +78,7 @@
       azure_rm_virtualmachine:
         resource_group: ansible
         name: "vm-linuxweb{{ count }}"
-        vm_size: Standard_DS1_v2
+        vm_size: Standard_B2s
         admin_username: ansible
         admin_password: "{{ password }}"
         ssh_password_enabled: true
