@@ -1,16 +1,28 @@
-FROM centos:centos7.7.1908
+FROM centos:7
+
+ENV LANG en_US.UTF-8
+ENV LC_ALL en_US.UTF-8
 
 RUN yum check-update; \
-   yum install -y gcc libffi-devel python3 epel-release; \
-   yum install -y openssh-clients; \
-   yum install -y sshpass; \
-   curl https://packages.microsoft.com/config/rhel/7/prod.repo | tee /etc/yum.repos.d/microsoft.repo; \
-   yum install -y powershell; \
-   yum clean all; \
-   pwsh -c "Set-PackageSource -Name PSGallery -Trusted"; \
-   pwsh -c "Install-Module AZ -Scope AllUsers"; \
-   pip3 install --upgrade pip
+    yum install -y gcc libffi-devel python3 epel-release; \
+    yum install -y python3-pip; \
+    yum install -y wget; \
+    yum install -y openssh-clients; \
+    yum install -y sshpass; \
+    yum clean all
 
-RUN pip3 install "ansible==2.9.12"; \ 
-   pip3 install ansible[azure]; \
-   pip3 install "pywinrm>=0.3.0"
+RUN pip3 install --upgrade pip; \
+    pip3 install --upgrade virtualenv; \
+    pip3 install pywinrm[kerberos]; \
+    pip3 install pywinrm; \
+    pip3 install jmspath; \
+    pip3 install requests; \
+    python3 -m pip install ansible; \
+    wget -q https://raw.githubusercontent.com/ansible-collections/azure/dev/requirements-azure.txt; \
+    pip3 install -r requirements-azure.txt; \
+    rm requirements-azure.txt; \
+    ansible-galaxy collection install azure.azcollection
+
+RUN curl https://packages.microsoft.com/config/rhel/7/prod.repo | tee /etc/yum.repos.d/microsoft.repo; \
+    yum install -y powershell; \
+    yum install -y azure-cli
