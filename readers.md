@@ -17,3 +17,4 @@
 * [Radu Lupan](https://twitter.com/RaduLupan)
 * [Juanjo Cruz](https://twitter.com/ju4njo_cruz)
 * [Stephane Tardif](https://twitter.com/stephanetar)
+* Adrian Muscat
